@@ -26,3 +26,8 @@ router.get("/:id", auth, sauceCtrl.getOneSauce);
 
 //Exportation du router
 module.exports = router;
+
+
+
+//Requête POST pour enregistrer un like/disklike
+router.post("/:id/like", auth, sauceCtrl.likeSauce);

@@ -1,2 +1,7 @@
 node_modules
 .DS_Store
+.env
+.snyk
+.eslintrc.js
+package.json
+package-lock.json

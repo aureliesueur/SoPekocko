@@ -3,6 +3,9 @@
 //Importation du modèles Sauce 
 const User = require("../models/User");
 
+//Importation du package de validation des emails
+const validator = require("validator");
+
 //Importation du package de cryptage des mots de passe
 const bcrypt = require("bcrypt");
 
@@ -12,6 +15,10 @@ const jwt = require("jsonwebtoken");
 
 //Fontion qui gère la logique métier de la route POST (inscription d'un nouvel user)
 exports.signup = (req, res, next) => {
+    //Validation de l'email
+    if (validator.isEmail(req.body.email) !== true) {
+                return res.status(400).json({error: "Email non valide !"});
+            }
     //Cryptage du password 
     bcrypt.hash(req.body.password, 10)
         .then(hash => {

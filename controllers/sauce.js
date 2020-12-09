@@ -6,10 +6,13 @@ const Sauce = require("../models/Sauce");
 //Importation du package fs, qui permet entre autres de supprimer des fichiers
 const fs = require("fs");
 
+//Importation du package xss-filters, qui contre les attaques XSS d'injection de code dans les données en sanitizant les données entrantes
+const xssFilters = require("xss-filters");
+
 //Fontion qui gère la logique métier de la route POST (ajout d'une nouvelle sauce)
 exports.createSauce = (req, res, next) => {
-    //Création d'un objet réponse (constitué de "sauce" et de "image") qu'on met au format json
-    const sauceObject = JSON.parse(req.body.sauce);
+    //Création d'un objet réponse (constitué de "sauce" et de "image") qu'on met au format json et qu'on passe en même temps au filtre xss-filters
+    const sauceObject = JSON.parse(xssFilters.inHTMLData(req.body.sauce));
     //delete sauceObject._id;
     const sauce = new Sauce({
         userId: sauceObject.userId,

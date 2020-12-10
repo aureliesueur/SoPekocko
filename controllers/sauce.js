@@ -1,4 +1,4 @@
-//Logique métier pour tout ce qui concerne les requêtes sur les sauces
+/*LOGIQUE METIER POUR CE QUI CONCERNE LES REQUETES SUR LES SAUCES */
 
 //Importation du modèles Sauce 
 const Sauce = require("../models/Sauce");
@@ -23,10 +23,6 @@ exports.createSauce = (req, res, next) => {
         imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
         mainPepper: sauceObject.mainPepper,
         heat: sauceObject.heat,
-       // likes: 0,
-       // dislikes: 0, 
-        //usersLiked: [],
-        //usersDisliked: []
     });
     sauce.save()
         .then(() => res.status(201).json({message: "Sauce enregistrée !"}))
@@ -81,10 +77,10 @@ exports.getOneSauce = (req, res, next) => {
 };
 
 
-//Fontion qui gère la logique métier de la route POST (Like/Dislike):
-//Ajout du like quand on clique sur like + ajout du user au tableau UsersLiked
-//Ajout du dislike quand on clique sur dislike + ajout du user au tableau UsersDisliked
-//Suppression du like ou du dislike quand le user clique à nouveau + suppression du user dans le tableau correspondant
+/*Fontion qui gère la logique métier de la route POST (Like/Dislike):
+- Ajout du like quand on clique sur like + ajout du user au tableau UsersLiked
+- Ajout du dislike quand on clique sur dislike + ajout du user au tableau UsersDisliked
+- Suppression du like ou du dislike quand le user clique à nouveau + suppression du user dans le tableau correspondant */
 exports.likeSauce = (req, res, next) => {
     switch (req.body.like) {
         case 1:
@@ -136,8 +132,8 @@ exports.likeSauce = (req, res, next) => {
                 .catch(error => res.status(500).json({error}));
             break;
         default:
-            console.log("Cette réponse n'est pas valide !");
+            throw error;
         } 
 };
             
- // A VERIFIER : PETIT BUG AVEC DES POUCES QUI DEVIENNENT NEGATIFS CF LIGNE 101, 116, 126. LIMITER A DU POSITIF LES LIKE ET DISLIKE           
+         

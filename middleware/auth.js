@@ -1,3 +1,5 @@
+/*MIDDLEWARE D'AUTHENTIFICATION */
+
 //Importation du package qui permet de créer et de vérifier les tokens d'authentification 
 const jwt = require("jsonwebtoken");
 
@@ -10,11 +12,11 @@ module.exports = (req, res, next) => {
         //Extraction de l'id contenu dans le token
         const userId = decodedToken.userId;
         if (req.body.userId && req.body.userId !== userId) {
-            throw "User ID non valable !";//ATTENTION ERREUR
+            throw "User ID non valable !";
         } else {
             next();
         }
     } catch {
-        res.status(401).json({error: new Error("Requête non authentifiée !")});//ATTENTION ERREUR
+        res.status(401).json({error: new Error("Requête non authentifiée !")});
     }
 };

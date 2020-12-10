@@ -1,4 +1,6 @@
-//Importation du package multer, qui permet le téléchargementd de fichiers
+/*MIDDLEWARE DE TELECHARGEMENT D'IMAGE */
+
+//Importation du package multer, qui permet le téléchargement de fichiers
 const multer = require("multer");
 
 //Dictionnaire d'extensions possibles pour les images

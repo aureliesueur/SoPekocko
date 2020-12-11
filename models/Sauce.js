@@ -21,7 +21,7 @@ const sauceSchema = mongoose.Schema({
 });
 
 //Pour appliquer la gestion des erreurs mongoose au schéma user
-userSchema.plugin(mongooseErrors);
+sauceSchema.plugin(mongooseErrors);
 
 //Exportation du schéma sous le nom "Sauce"
 module.exports = mongoose.model("Sauce", sauceSchema);

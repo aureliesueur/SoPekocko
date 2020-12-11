@@ -44,7 +44,7 @@ mongoose.connect(uri, {
         useCreateIndex: true
     })
     .then(() => console.log("Connexion à MongoDB réussie !"))
-    .catch(error => res.status(500).json({error: new Error("La connexion à MongoDB a échoué !")}));
+    .catch(() => console.log("La connexion à MongoDB a échoué !"));
 
 //Déclaration de notre appli comme fonctionnant avec express (et donc Node)
 const app = express();

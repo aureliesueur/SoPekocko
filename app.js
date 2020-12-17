@@ -45,7 +45,7 @@ mongoose.connect(uri, {
     })
     .then(() => console.log("Connexion à MongoDB réussie !"))
     .catch((error) => {
-        res.status(500).json({error});
+        return error;
         throw new Error("La connexion à MongoDB a échoué !");
     });
 

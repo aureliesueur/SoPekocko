@@ -14,8 +14,9 @@ To get the frontend part, please clone the following GitHub repository : https:/
 ACCESS TO THE DATABASE 
 
 This app uses the plugin dotenv to mask the connexion data.
-In this folder, you'll find a ".env-evaluator" file, which will provide you access to mongodb Piquante database.
+In this folder, you'll find a ".env-evaluator" file, which will provide you access to mongodb Piquante database, once filled with right values.
 To make it work, please change its name to ".env".
+Please fill up the values with DB_USER and DB_PASS provided separately.
 NB : the validity of this special access ends after a week.
 
 RUN THE APP

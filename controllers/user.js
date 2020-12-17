@@ -26,7 +26,7 @@ const jwt = require("jsonwebtoken");
 exports.signup = (req, res, next) => {
     //Validation de l'email
     if (validator.isEmail(req.body.email) !== true) {
-        return res.status(400).json({error :"Email non valide !"});
+        throw new Error("Email non valide");
     }
     //Cryptage du password 
     bcrypt.hash(req.body.password, 10)
@@ -56,7 +56,8 @@ exports.login = (req, res, next) => {
     User.findOne({email: maskData.maskEmail2(req.body.email, emailMask2Options)})
         .then(user => {
             if (!user) {
-                return res.status(404).json({error: "Utilisateur non trouvé !"});
+                //return res.status(404).json({error: "Utilisateur non trouvé !"});
+                throw new Error("Utilisateur non trouvé !");
             }
         //Si on a trouvé le mail dans la DB, on compare le hash du nouveau mot de passe au hash de la DB
         bcrypt.compare(req.body.password, user.password)

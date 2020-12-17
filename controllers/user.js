@@ -9,8 +9,10 @@ const validator = require("validator");
 //Importation du package de cryptage des mots de passe
 const bcrypt = require("bcrypt");
 
-//Importation du package de masquage/cryptage des emails avec Rot13
+//Importation du package de masquage/cryptage des emails avec Rot13 et des keys asymétriques pour complexifier le décryptage
 var ebg13 = require("ebg13");
+var keys = require("ebg13/keys");
+myKeys = keys.generate();
 
 //Importation du package qui permet de créer et de vérifier les tokens d'authentification 
 const jwt = require("jsonwebtoken");
@@ -31,7 +33,7 @@ exports.signup = (req, res, next) => {
             password: hash
         });
     //Masquage de l'email avec Rot13
-    const maskedEmail = ebg13(req.body.email);
+    const maskedEmail = ebg13(req.body.email, myKeys.public);
     user.email = maskedEmail;
     //Enregistrement du new user dans la base de données
         user.save()
@@ -47,7 +49,7 @@ exports.signup = (req, res, next) => {
 
 exports.login = (req, res, next) => {
     //Recherche de l'utilisateur dans la DB via son email (que l'on masque au passage avec Rot13 pour pouvoir le comparer aux emails stockés masqués)
-    User.findOne({email: ebg13(req.body.email)})
+    User.findOne({email: ebg13(req.body.email, myKeys.public)})
         .then(user => {
             if (!user) {
                 return res.status(404).json({error: "Utilisateur non trouvé !"});

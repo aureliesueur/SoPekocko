@@ -9,14 +9,8 @@ const validator = require("validator");
 //Importation du package de cryptage des mots de passe
 const bcrypt = require("bcrypt");
 
-//Importation du package de masquage des emails
-const maskData = require("maskdata");
-const emailMask2Options = {
-    maskWith: "*",
-    unmaskedStartCharactersBeforeAt: 0,
-    unmaskedEndCharactersAfterAt: 257,
-    maskAtTheRate: false
-};
+//Importation du package de masquage/cryptage des emails avec Rot13
+var ebg13 = require("ebg13");
 
 //Importation du package qui permet de créer et de vérifier les tokens d'authentification 
 const jwt = require("jsonwebtoken");
@@ -36,9 +30,9 @@ exports.signup = (req, res, next) => {
             email: req.body.email,
             password: hash
         });
-    //Masquage de l'email 
-    const maskedEmail = maskData.maskEmail2(req.body.email, emailMask2Options);
-        user.email = maskedEmail;
+    //Masquage de l'email avec Rot13
+    const maskedEmail = ebg13(req.body.email);
+    user.email = maskedEmail;
     //Enregistrement du new user dans la base de données
         user.save()
             .then(() => res.status(201).json({message : "Utilisateur créé !"}))
@@ -52,13 +46,13 @@ exports.signup = (req, res, next) => {
 //Fontion qui gère la logique métier de la route POST (connexion d'un user existant dans la database)
 
 exports.login = (req, res, next) => {
-    //Recherche de l'utilisateur dans la DB via son email (que l'on masque au passage pour pouvoir le comparer aux emails stockés masqués)
-    User.findOne({email: maskData.maskEmail2(req.body.email, emailMask2Options)})
+    //Recherche de l'utilisateur dans la DB via son email (que l'on masque au passage avec Rot13 pour pouvoir le comparer aux emails stockés masqués)
+    User.findOne({email: ebg13(req.body.email)})
         .then(user => {
             if (!user) {
-                //return res.status(404).json({error: "Utilisateur non trouvé !"});
-                throw new Error("Utilisateur non trouvé !");
+                return res.status(404).json({error: "Utilisateur non trouvé !"});
             }
+        
         //Si on a trouvé le mail dans la DB, on compare le hash du nouveau mot de passe au hash de la DB
         bcrypt.compare(req.body.password, user.password)
             .then(valid => {

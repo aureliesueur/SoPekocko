@@ -2,10 +2,8 @@
 
 //Importation du modèles Sauce 
 const Sauce = require("../models/Sauce");
-
 //Importation du package fs, qui permet entre autres de supprimer des fichiers
 const fs = require("fs");
-
 //Importation du package xss-filters, qui contre les attaques XSS d'injection de code dans les données en sanitizant les données entrantes
 const xssFilters = require("xss-filters");
 
@@ -27,7 +25,7 @@ exports.createSauce = (req, res, next) => {
     sauce.save()
         .then(() => res.status(201).json({message: "Sauce enregistrée !"}))
         .catch(error => res.status(400).json({error}));
-};
+}
 
 //Fontion qui gère la logique métier de la route PUT (modification d'une sauce existante)
 exports.modifySauce = (req, res, next) => {
@@ -37,7 +35,7 @@ exports.modifySauce = (req, res, next) => {
         //Si oui, on récupère la partie "sauce" de l'objet réponse qu'on met en json
         ...JSON.parse(req.body.sauce),
         //Expression dynamique pour recréer l'adresse url pour trouver le fichier téléchargé récupéré par multer
-        imageUrl:`${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+            imageUrl:`${req.protocol}://${req.get("host")}/images/${req.file.filename}`
         //Si non, on récupère directement le body de la requête
         } : {...req.body};
     //On met à jour en remplaçant les données mais en gardant le même id

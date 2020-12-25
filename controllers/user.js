@@ -15,7 +15,7 @@ const jwt = require("jsonwebtoken");
 exports.signup = (req, res, next) => {
     //Validation de l'email
     if (validator.isEmail(req.body.email) !== true) {
-        res.status(401).json({error: "Email non valide"});
+        return res.status(401).json({error: "Email non valide"});
     }
     //Cryptage du password 
     bcrypt.hash(req.body.password, 10)
@@ -47,23 +47,23 @@ exports.login = (req, res, next) => {
                 return res.status(404).json({error: "Utilisateur non trouvé !"});
             }
         
-        //Si on a trouvé le mail dans la DB, on compare le hash du nouveau mot de passe au hash de la DB
-        bcrypt.compare(req.body.password, user.password)
-            .then(valid => {
-                if(!valid) {
-                    return res.status(401).json({error: "Mot de passe incorrect !"});
-                }
-                res.status(200).json({
-                    userId: user._id,//ATTENTION USER ID !
-                    //Encodage d'un nouveau token
-                    token: jwt.sign(
-                        {userId : user._id},
-                        "RANDOM_TOKEN_SECRET",
-                        {expiresIn: "24h"}
-                    )
-                });
+            //Si on a trouvé le mail dans la DB, on compare le hash du nouveau mot de passe au hash de la DB
+            bcrypt.compare(req.body.password, user.password)
+                .then(valid => {
+                    if(!valid) {
+                        return res.status(401).json({error: "Mot de passe incorrect !"});
+                    }
+                    res.status(200).json({
+                        userId: user._id,//ATTENTION USER ID !
+                        //Encodage d'un nouveau token
+                        token: jwt.sign(
+                            {userId : user._id},
+                            "RANDOM_TOKEN_SECRET",
+                            {expiresIn: "24h"}
+                        )
+                    });
+                })
+                .catch(error => res.status(500).json({error}));
             })
-            .catch(error => res.status(500).json({error}));
-        })
         .catch(error => res.status(500).json({error}));
 };
